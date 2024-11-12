@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { Layout, Plus, Shield } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { Layout, Plus, Shield } from "lucide-react";
+import Image from "next/image";
+import UploadingDialog from "./uploading-dialog";
 
 const sidebarLinks = [
   {
@@ -23,10 +24,12 @@ export default function Sidebar() {
         <Image src={"logo.svg"} alt="logo" width={38} height={38} />
       </div>
       <div className="flex flex-col w-full gap-2 p-3">
-        <Button className="justify-center w-full">
-          <Plus className="mr-2" />
-          Upload PDF
-        </Button>
+        <UploadingDialog>
+          <Button className="justify-center w-full">
+            <Plus className="mr-2" />
+            Upload PDF
+          </Button>
+        </UploadingDialog>
         {sidebarLinks.map((link, i) => (
           <Button key={i} variant={"ghost"} className="w-full justify-center">
             <link.icon className="w-4 h-4 mr-2" />

@@ -6,8 +6,10 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="">
-        <Navbar />
+      <div className="w-full">
+        <div className="shadow">
+          <Navbar />
+        </div>
         {children}
       </div>
     </div>
