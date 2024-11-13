@@ -12,9 +12,46 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ReactNode } from "react";
+import { api } from "@/convex/_generated/api";
+import { useUser } from "@clerk/nextjs";
+import { useMutation } from "convex/react";
+import { Loader2 } from "lucide-react";
+import React, { ReactNode, useState, useTransition } from "react";
 
 export default function UploadingDialog({ children }: { children: ReactNode }) {
+  const { user } = useUser();
+  const [isPending, startTransition] = useTransition();
+  const [file, setFile] = useState<File | null>(null);
+  const [fileName, setFileName] = useState<string>("");
+  const generateUploadUrl = useMutation(api.fileStorage.generateUploadUrl);
+  const saveFile = useMutation(api.fileStorage.saveFile);
+
+  function onFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (files) {
+      // You can handle the uploaded files here
+      setFile(files[0]);
+    }
+  }
+
+  function handleUpload() {
+    startTransition(async () => {
+      const postUrl = await generateUploadUrl();
+      // Step 2: POST the file to the URL
+      const result = await fetch(postUrl, {
+        method: "POST",
+        headers: { "Content-Type": file!.type },
+        body: file,
+      });
+      const { storageId } = await result.json();
+      await saveFile({
+        storageId,
+        fileName: fileName,
+        createdBy: user?.primaryEmailAddress?.emailAddress as string,
+      });
+    });
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -24,9 +61,19 @@ export default function UploadingDialog({ children }: { children: ReactNode }) {
           <DialogDescription asChild>
             <div className="">
               <Label>Select a PDF File:</Label>
-              <Input type="file" />
+              <Input
+                type="file"
+                accept="application/pdf"
+                className="cursor-pointer"
+                onChange={onFileSelect}
+              />
               <Label>Name</Label>
-              <Input type="text" placeholder="Enter a name for your file" />
+              <Input
+                type="text"
+                placeholder="Enter a name for your file"
+                defaultValue={fileName}
+                onChange={(e) => setFileName(e.target.value)}
+              />
             </div>
           </DialogDescription>
         </DialogHeader>
@@ -34,7 +81,10 @@ export default function UploadingDialog({ children }: { children: ReactNode }) {
           <DialogClose asChild>
             <Button variant={"secondary"}>Close</Button>
           </DialogClose>
-          <Button>Upload</Button>
+          <Button disabled={isPending} onClick={handleUpload}>
+            {isPending && <Loader2 className="animate-spin" />}
+            Upload
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

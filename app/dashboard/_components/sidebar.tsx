@@ -26,13 +26,13 @@ export default function Sidebar() {
       <div className="flex flex-col w-full gap-2 p-3">
         <UploadingDialog>
           <Button className="justify-center w-full">
-            <Plus className="mr-2" />
+            <Plus className="" />
             Upload PDF
           </Button>
         </UploadingDialog>
         {sidebarLinks.map((link, i) => (
           <Button key={i} variant={"ghost"} className="w-full justify-center">
-            <link.icon className="w-4 h-4 mr-2" />
+            <link.icon className="w-4 h-4" />
             {link.label}
           </Button>
         ))}
