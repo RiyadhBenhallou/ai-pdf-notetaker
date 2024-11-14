@@ -1,31 +1,37 @@
 "use client";
 
-import { useCallback } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
-import Underline from "@tiptap/extension-underline";
-import TextAlign from "@tiptap/extension-text-align";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Toggle } from "@/components/ui/toggle";
+import { api } from "@/convex/_generated/api";
+import { chatSession } from "@/lib/aiModel";
+import { cn, genPrompt } from "@/lib/utils";
 import Highlight from "@tiptap/extension-highlight";
+import Placeholder from "@tiptap/extension-placeholder";
+import TextAlign from "@tiptap/extension-text-align";
+import Underline from "@tiptap/extension-underline";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { useAction } from "convex/react";
 import {
-  Bold,
-  Italic,
-  UnderlineIcon,
-  Strikethrough,
-  AlignLeft,
   AlignCenter,
-  AlignRight,
   AlignJustify,
+  AlignLeft,
+  AlignRight,
+  Bold,
   Heading1,
   Heading2,
   Highlighter,
+  Italic,
   List,
   ListOrdered,
   Quote,
+  Sparkles,
+  Strikethrough,
+  UnderlineIcon,
 } from "lucide-react";
-import { Toggle } from "@/components/ui/toggle";
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
+import { useParams } from "next/navigation";
+import { useCallback } from "react";
 
 export default function TextEditor() {
   const editor = useEditor({
@@ -41,6 +47,7 @@ export default function TextEditor() {
       Highlight,
     ],
     content: "",
+    immediatelyRender: false,
     editorProps: {
       attributes: {
         class:
@@ -49,9 +56,39 @@ export default function TextEditor() {
     },
     autofocus: true,
   });
+  const { fileId } = useParams();
+  const searchAi = useAction(api.myActions.search);
+
+  const onAiSelection = async () => {
+    const selectedText = editor?.state.doc.textBetween(
+      editor.state.selection.from,
+      editor.state.selection.to,
+      " "
+    );
+    if (selectedText) {
+      const result = await searchAi({
+        query: selectedText,
+        fileId: fileId as string,
+      });
+      const unformattedResult = JSON.parse(result);
+      let answer = "";
+      unformattedResult.forEach((item: any) => {
+        answer += item.pageContent + "\n";
+      });
+
+      const prompt = genPrompt(selectedText, answer);
+      const aiResponse = await chatSession.sendMessage(prompt);
+      const finalAnswer = aiResponse.response.text();
+      editor
+        ?.chain()
+        .focus()
+        .insertContent(`${selectedText}\n${finalAnswer}`)
+        .run();
+    }
+  };
 
   const ToolbarToggle = useCallback(
-    ({ isActive, onClick, icon: Icon, tooltip }) => {
+    ({ isActive, onClick, icon: Icon, tooltip }: any) => {
       return (
         <Toggle
           size="sm"
@@ -165,6 +202,18 @@ export default function TextEditor() {
           icon={AlignJustify}
           tooltip="Justify"
         />
+        <Separator orientation="vertical" className="mx-1 h-6" />
+
+        <Button
+          size="sm"
+          variant={"ghost"}
+          // pressed={isActive}
+          // onPressedChange={onClick}
+          onClick={onAiSelection}
+          className="hover:bg-muted data-[state=on]:bg-muted"
+        >
+          <Sparkles className="h-4 w-4 hover:bg-yellow-500" />
+        </Button>
       </div>
       <EditorContent
         editor={editor}
