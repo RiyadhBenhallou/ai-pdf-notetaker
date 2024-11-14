@@ -20,6 +20,7 @@ import React, { ReactNode, useState, useTransition } from "react";
 
 export default function UploadingDialog({ children }: { children: ReactNode }) {
   const { user } = useUser();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>("");
@@ -53,12 +54,16 @@ export default function UploadingDialog({ children }: { children: ReactNode }) {
       const response = await fetch(`/api/pdf-loader?pdfUrl=${savedFile.url}`);
       const data = await response.json();
       console.log(data.result);
-      embedDoc({ splitText: data.result, fileId: savedFile.fileId });
+      await embedDoc({
+        splitText: data.result,
+        fileId: savedFile.fileId,
+      });
+      setIsOpen(false);
     });
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>

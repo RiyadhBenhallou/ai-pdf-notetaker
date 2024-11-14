@@ -12,7 +12,7 @@ export const ingest = action({
   handler: async (ctx, args) => {
     await ConvexVectorStore.fromTexts(
       args.splitText,
-      [args.fileId],
+      { fileId: args.fileId },
       new GoogleGenerativeAIEmbeddings({
         apiKey: "AIzaSyAfavlSJAnqClMLpoqkW2WRvwoPzpSXWBY",
         model: "text-embedding-004", // 768 dimensions

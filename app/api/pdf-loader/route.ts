@@ -4,8 +4,8 @@ import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 export async function GET(req: NextRequest) {
   const reqUrl = req.url;
-  const url = new URL(reqUrl);
-  const pdfUrl = url.searchParams.get("pdfUrl");
+  const { searchParams } = new URL(reqUrl);
+  const pdfUrl = searchParams.get("pdfUrl");
 
   if (!pdfUrl) {
     return NextResponse.json({ error: "No PDF URL provided" });
