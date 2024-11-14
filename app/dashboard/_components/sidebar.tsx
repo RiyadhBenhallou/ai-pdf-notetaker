@@ -21,7 +21,7 @@ export default function Sidebar() {
   return (
     <div className="md:w-64 shadow h-screen relative">
       <div className="flex justify-center mb-12 p-3">
-        <Image src={"logo.svg"} alt="logo" width={38} height={38} />
+        <Image src={"/logo.svg"} alt="logo" width={38} height={38} />
       </div>
       <div className="flex flex-col w-full gap-2 p-3">
         <UploadingDialog>
