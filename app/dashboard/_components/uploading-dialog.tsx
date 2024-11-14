@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
-import { useMutation } from "convex/react";
+import { useAction, useMutation } from "convex/react";
 import { Loader2 } from "lucide-react";
 import React, { ReactNode, useState, useTransition } from "react";
 
@@ -25,6 +25,7 @@ export default function UploadingDialog({ children }: { children: ReactNode }) {
   const [fileName, setFileName] = useState<string>("");
   const generateUploadUrl = useMutation(api.fileStorage.generateUploadUrl);
   const saveFile = useMutation(api.fileStorage.saveFile);
+  const embedDoc = useAction(api.myActions.ingest);
 
   function onFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
@@ -44,11 +45,15 @@ export default function UploadingDialog({ children }: { children: ReactNode }) {
         body: file,
       });
       const { storageId } = await result.json();
-      await saveFile({
+      const savedFile = await saveFile({
         storageId,
         fileName: fileName,
         createdBy: user?.primaryEmailAddress?.emailAddress as string,
       });
+      const response = await fetch(`/api/pdf-loader?pdfUrl=${savedFile.url}`);
+      const data = await response.json();
+      console.log(data.result);
+      embedDoc({ splitText: data.result, fileId: savedFile.fileId });
     });
   }
 

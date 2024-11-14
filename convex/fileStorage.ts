@@ -13,13 +13,13 @@ export const saveFile = mutation({
   },
   handler: async (ctx, args) => {
     const url = await ctx.storage.getUrl(args.storageId);
-    const result = await ctx.db.insert("pdfFiles", {
+    const fileId = await ctx.db.insert("pdfFiles", {
       fileUrl: url as string,
       fileName: args.fileName,
       createdBy: args.createdBy,
     });
 
-    return result;
+    return { fileId, url };
   },
 });
 

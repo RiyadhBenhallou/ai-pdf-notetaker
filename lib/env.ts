@@ -4,6 +4,7 @@ import { z } from "zod";
 export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
+    GEMINI_API_KEY: z.string(),
   },
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
