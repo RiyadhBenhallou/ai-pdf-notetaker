@@ -25,15 +25,17 @@ import {
   Italic,
   List,
   ListOrdered,
+  Loader2,
   Quote,
   Sparkles,
   Strikethrough,
   UnderlineIcon,
 } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useTransition } from "react";
 
 export default function TextEditor() {
+  const [isPending, startTransition] = useTransition();
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -59,32 +61,37 @@ export default function TextEditor() {
   const { fileId } = useParams();
   const searchAi = useAction(api.myActions.search);
 
-  const onAiSelection = async () => {
-    const selectedText = editor?.state.doc.textBetween(
-      editor.state.selection.from,
-      editor.state.selection.to,
-      " "
-    );
-    if (selectedText) {
-      const result = await searchAi({
-        query: selectedText,
-        fileId: fileId as string,
-      });
-      const unformattedResult = JSON.parse(result);
-      let answer = "";
-      unformattedResult.forEach((item: any) => {
-        answer += item.pageContent + "\n";
-      });
+  const onAiSelection = () => {
+    startTransition(async () => {
+      const selectedText = editor?.state.doc.textBetween(
+        editor.state.selection.from,
+        editor.state.selection.to,
+        " "
+      );
+      if (selectedText) {
+        const result = await searchAi({
+          query: selectedText,
+          fileId: fileId as string,
+        });
+        const unformattedResult = JSON.parse(result);
+        let answer = "";
+        unformattedResult.forEach((item: any) => {
+          answer += item.pageContent + "\n";
+        });
 
-      const prompt = genPrompt(selectedText, answer);
-      const aiResponse = await chatSession.sendMessage(prompt);
-      const finalAnswer = aiResponse.response.text();
-      editor
-        ?.chain()
-        .focus()
-        .insertContent(`${selectedText}\n${finalAnswer}`)
-        .run();
-    }
+        const prompt = genPrompt(selectedText, answer);
+        const aiResponse = await chatSession.sendMessage(prompt);
+        const finalAnswer = aiResponse.response
+          .text()
+          .replace("html", "")
+          .replace("```", "");
+        editor
+          ?.chain()
+          .focus()
+          .insertContent(`${selectedText}\n${finalAnswer}`)
+          .run();
+      }
+    });
   };
 
   const ToolbarToggle = useCallback(
@@ -212,7 +219,11 @@ export default function TextEditor() {
           onClick={onAiSelection}
           className="hover:bg-muted data-[state=on]:bg-muted"
         >
-          <Sparkles className="h-4 w-4 hover:bg-yellow-500" />
+          {isPending ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Sparkles className="h-4 w-4 hover:bg-yellow-500" />
+          )}
         </Button>
       </div>
       <EditorContent
