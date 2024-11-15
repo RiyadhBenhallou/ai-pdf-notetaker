@@ -20,4 +20,9 @@ export default defineSchema({
     vectorField: "embedding",
     dimensions: 768,
   }),
+  notes: defineTable({
+    fileId: v.string(),
+    createdBy: v.string(),
+    note: v.string(),
+  }),
 });

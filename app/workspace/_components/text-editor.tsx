@@ -6,13 +6,14 @@ import { Toggle } from "@/components/ui/toggle";
 import { api } from "@/convex/_generated/api";
 import { chatSession } from "@/lib/aiModel";
 import { cn, genPrompt } from "@/lib/utils";
+import { useUser } from "@clerk/nextjs";
 import Highlight from "@tiptap/extension-highlight";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useAction } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import {
   AlignCenter,
   AlignJustify,
@@ -32,7 +33,7 @@ import {
   UnderlineIcon,
 } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useCallback, useTransition } from "react";
+import { useCallback, useEffect, useTransition } from "react";
 
 export default function TextEditor() {
   const [isPending, startTransition] = useTransition();
@@ -59,7 +60,21 @@ export default function TextEditor() {
     autofocus: true,
   });
   const { fileId } = useParams();
+  const { user } = useUser();
   const searchAi = useAction(api.myActions.search);
+  const saveNote = useMutation(api.notes.saveNote);
+  const savedNote = useQuery(api.notes.getNoteById, {
+    fileId: fileId as string,
+  });
+
+  useEffect(() => {
+    editor
+      ?.chain()
+      .focus()
+      .setContent(savedNote as string)
+      .run();
+    // editor?.commands.setContent(savedNote as string);
+  }, [savedNote, editor]);
 
   const onAiSelection = () => {
     startTransition(async () => {
@@ -84,12 +99,19 @@ export default function TextEditor() {
         const finalAnswer = aiResponse.response
           .text()
           .replace("html", "")
+          .replace("```", "")
           .replace("```", "");
         editor
           ?.chain()
           .focus()
-          .insertContent(`${selectedText}\n${finalAnswer}`)
+          .insertContent(`${selectedText}\nn${finalAnswer}`)
           .run();
+        const allText = editor?.getHTML();
+        await saveNote({
+          fileId: fileId as string,
+          createdBy: user?.primaryEmailAddress?.emailAddress as string,
+          note: allText as string,
+        });
       }
     });
   };
