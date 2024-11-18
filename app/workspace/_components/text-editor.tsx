@@ -104,7 +104,7 @@ export default function TextEditor() {
         editor
           ?.chain()
           .focus()
-          .insertContent(`${selectedText}\nn${finalAnswer}`)
+          .insertContent(`${selectedText}<br />${finalAnswer}`)
           .run();
         const allText = editor?.getHTML();
         await saveNote({

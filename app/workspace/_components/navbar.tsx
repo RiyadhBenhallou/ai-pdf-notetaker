@@ -1,5 +1,6 @@
+import { Button } from "@/components/ui/button";
 import { UserButton } from "@clerk/nextjs";
-import { Loader2 } from "lucide-react";
+import { Loader2, SaveIcon } from "lucide-react";
 import Image from "next/image";
 
 export default function Navbar({ fileName }: { fileName: string | undefined }) {
@@ -9,7 +10,12 @@ export default function Navbar({ fileName }: { fileName: string | undefined }) {
       <h2 className="font-semibold">
         {fileName || <Loader2 className="w-4 h-4 animate-spin" />}
       </h2>
-      <UserButton />
+      <div className="flex items-center gap-4">
+        <Button size={"icon"} variant={"ghost"}>
+          <SaveIcon className="w-4 h-4" />
+        </Button>
+        <UserButton />
+      </div>
     </div>
   );
 }
