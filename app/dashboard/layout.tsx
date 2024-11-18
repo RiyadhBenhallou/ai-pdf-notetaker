@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div className="shadow">
           <Navbar />
         </div>
-        {children}
+        <div className="p-8">{children}</div>
       </div>
     </div>
   );

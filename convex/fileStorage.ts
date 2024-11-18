@@ -44,3 +44,16 @@ export const getFileById = query({
     return file[0];
   },
 });
+
+export const getUserFiles = query({
+  args: {
+    createdBy: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const files = await ctx.db
+      .query("pdfFiles")
+      .filter((q) => q.eq(q.field("createdBy"), args.createdBy))
+      .collect();
+    return files;
+  },
+});
