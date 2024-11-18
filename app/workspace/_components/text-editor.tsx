@@ -25,9 +25,9 @@ import {
   Highlighter,
   Italic,
   List,
-  ListOrdered,
   Loader2,
   Quote,
+  SaveIcon,
   Sparkles,
   Strikethrough,
   UnderlineIcon,
@@ -116,6 +116,19 @@ export default function TextEditor() {
     });
   };
 
+  const [savingNoteIsPending, startSavingNoteToDbTransition] = useTransition();
+
+  const saveNoteToDb = () => {
+    startSavingNoteToDbTransition(async () => {
+      const allText = editor?.getHTML();
+      await saveNote({
+        fileId: fileId as string,
+        createdBy: user?.primaryEmailAddress?.emailAddress as string,
+        note: allText as string,
+      });
+    });
+  };
+
   const ToolbarToggle = useCallback(
     ({ isActive, onClick, icon: Icon, tooltip }: any) => {
       return (
@@ -194,12 +207,12 @@ export default function TextEditor() {
           icon={List}
           tooltip="Bullet List"
         />
-        <ToolbarToggle
+        {/* <ToolbarToggle
           isActive={editor.isActive("orderedList")}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           icon={ListOrdered}
           tooltip="Ordered List"
-        />
+        /> */}
         <ToolbarToggle
           isActive={editor.isActive("blockquote")}
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
@@ -245,6 +258,20 @@ export default function TextEditor() {
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
             <Sparkles className="h-4 w-4 hover:bg-yellow-500" />
+          )}
+        </Button>
+        <Button
+          size="sm"
+          variant={"ghost"}
+          // pressed={isActive}
+          // onPressedChange={onClick}
+          onClick={saveNoteToDb}
+          className="hover:bg-muted data-[state=on]:bg-muted"
+        >
+          {savingNoteIsPending ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <SaveIcon className="w-4 h-4" />
           )}
         </Button>
       </div>
