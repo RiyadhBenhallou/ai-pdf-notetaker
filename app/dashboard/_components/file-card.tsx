@@ -7,9 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowUpRightFromSquare } from "lucide-react";
+import { ArrowUpRightFromSquare, Edit, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import DeletionDialog from "./deletion-dialog";
 
 export default function FileCard(file: {
   _id: string;
@@ -38,7 +39,17 @@ export default function FileCard(file: {
       <CardContent>
         <h1>{file.fileName}</h1>
       </CardContent>
-      <CardFooter className="flex flex-row-reverse justify-start">
+      <CardFooter className="flex items-center justify-between">
+        <div className="flex items-center gap-1">
+          <Button variant={"ghost"} size={"icon"}>
+            <Edit className="w-4 h-4" />
+          </Button>
+          <DeletionDialog fileId={file._id}>
+            <Button variant={"ghost"} size={"icon"}>
+              <Trash className="w-4 h-4 text-red-500" />
+            </Button>
+          </DeletionDialog>
+        </div>
         <Button asChild size={"sm"}>
           <Link
             href={`/workspace/${file._id}`}

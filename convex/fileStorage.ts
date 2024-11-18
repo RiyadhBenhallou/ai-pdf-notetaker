@@ -15,6 +15,7 @@ export const saveFile = mutation({
     const url = await ctx.storage.getUrl(args.storageId);
     const fileId = await ctx.db.insert("pdfFiles", {
       fileUrl: url as string,
+      storageId: args.storageId,
       fileName: args.fileName,
       createdBy: args.createdBy,
     });

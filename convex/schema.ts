@@ -9,6 +9,7 @@ export default defineSchema({
   }),
   pdfFiles: defineTable({
     fileUrl: v.string(),
+    storageId: v.string(),
     fileName: v.string(),
     createdBy: v.string(),
   }),
