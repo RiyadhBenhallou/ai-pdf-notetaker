@@ -71,21 +71,21 @@ export const deleteFile = mutation({
     if (file.length > 0) {
       await ctx.storage.delete(file[0].storageId);
       await ctx.db.delete(file[0]._id);
-      const note = await ctx.db
-        .query("notes")
-        .filter((q) => q.eq(q.field("fileId"), args.fileId))
-        .collect();
-      if (note.length > 0) {
-        await ctx.db.delete(note[0]._id);
-        const documents = await ctx.db
-          .query("documents")
-          .filter((q) => q.eq(q.field("metadata"), { fileId: args.fileId }))
-          .collect();
-        if (documents.length > 0) {
-          for (const document of documents) {
-            await ctx.db.delete(document._id);
-          }
-        }
+    }
+    const note = await ctx.db
+      .query("notes")
+      .filter((q) => q.eq(q.field("fileId"), args.fileId))
+      .collect();
+    if (note.length > 0) {
+      await ctx.db.delete(note[0]._id);
+    }
+    const documents = await ctx.db
+      .query("documents")
+      .filter((q) => q.eq(q.field("metadata"), { fileId: args.fileId }))
+      .collect();
+    if (documents.length > 0) {
+      for (const document of documents) {
+        await ctx.db.delete(document._id);
       }
     }
   },
