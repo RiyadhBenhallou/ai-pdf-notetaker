@@ -10,7 +10,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ReactNode } from "react";
+import { api } from "@/convex/_generated/api";
+import { useMutation } from "convex/react";
+import { Loader2 } from "lucide-react";
+import { ReactNode, useTransition } from "react";
 
 export default function DeletionDialog({
   children,
@@ -19,6 +22,13 @@ export default function DeletionDialog({
   children: ReactNode;
   fileId: string;
 }) {
+  const [isPending, startTransition] = useTransition();
+  const deleteFileById = useMutation(api.fileStorage.deleteFile);
+  const deleteFile = () => {
+    startTransition(async () => {
+      await deleteFileById({ fileId });
+    });
+  };
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -32,7 +42,12 @@ export default function DeletionDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-red-500 hover:bg-red-600">
+          <AlertDialogAction
+            className="bg-red-500 hover:bg-red-600"
+            onClick={deleteFile}
+            disabled={isPending}
+          >
+            {isPending && <Loader2 className="w-4 h-4 animate-spin" />}
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>
