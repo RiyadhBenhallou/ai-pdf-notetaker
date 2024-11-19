@@ -160,3 +160,32 @@ export const getAllNotes = query(async (ctx) => {
   const notes = await ctx.db.query("notes").collect();
   return notes;
 });
+
+export const editFile = mutation({
+  args: {
+    fileId: v.string(),
+    fileName: v.string(),
+  },
+  handler: async (ctx, args) => {
+    try {
+      // Fetch the file with the given ID
+      const file = await ctx.db
+        .query("pdfFiles")
+        .filter((q) => q.eq(q.field("_id"), args.fileId))
+        .collect();
+
+      // Check if the file exists
+      if (file.length === 0) {
+        throw new Error("File not found");
+      }
+
+      // Update the file name
+      await ctx.db.patch(file[0]._id, {
+        fileName: args.fileName,
+      });
+    } catch (error) {
+      // Handle and log errors
+      console.error("Error editing file:", error);
+    }
+  },
+});

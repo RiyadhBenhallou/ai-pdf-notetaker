@@ -59,6 +59,7 @@ export default function UploadingDialog({ children }: { children: ReactNode }) {
         fileId: savedFile.fileId,
       });
       setIsOpen(false);
+      setFileName("");
     });
   }
 
