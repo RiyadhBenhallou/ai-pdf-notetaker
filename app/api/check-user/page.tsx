@@ -1,13 +1,12 @@
 "use client";
-import { useUserInfo } from "@/context/userInfoContext";
 import { api } from "@/convex/_generated/api";
+import { useUser } from "@clerk/nextjs";
 import { useMutation } from "convex/react";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
 export default function DashaboardPage() {
-  // const { user } = useUser();
-  const { user } = useUserInfo();
+  const { user } = useUser();
   const createUser = useMutation(api.user.createUser);
 
   useEffect(() => {
@@ -18,11 +17,10 @@ export default function DashaboardPage() {
         imageUrl: user?.imageUrl as string,
       });
       console.log(result);
+      redirect("/dashboard");
     }
-    if (user) {
-      checkUser();
-    }
+    checkUser();
   }, [user, createUser]);
 
-  return redirect("/dashboard");
+  return null;
 }

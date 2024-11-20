@@ -26,7 +26,7 @@ export default function Sidebar() {
   const { userInfo, files } = useUserInfo();
   const pathname = usePathname();
   return (
-    <div className="md:w-64 shadow h-screen relative">
+    <div className="md:w-64 shadow h-screen relative bg-gray-50">
       <div className="flex justify-center mb-12 p-3">
         <Image src={"/logo.svg"} alt="logo" width={38} height={38} />
         {/* <FileText className="h-8 w-8" /> */}

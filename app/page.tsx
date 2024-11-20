@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronRight, FileText, Brain, Zap, Check } from "lucide-react";
 import Navbar from "./_components/navbar";
+import Link from "next/link";
 
 export default function LandingPage() {
   const [email, setEmail] = useState("");
@@ -17,7 +18,7 @@ export default function LandingPage() {
   return (
     <div>
       <Navbar />
-      <div className="min-h-screen bg-white text-black">
+      <div className="min-h-screen bg-gray-50 text-black">
         {/* Hero Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-100">
           <div className="max-w-7xl mx-auto">
@@ -31,10 +32,12 @@ export default function LandingPage() {
                 cutting-edge AI technology.
               </p>
               <div className="mt-10 relative inline-block">
-                <Button className="bg-black hover:bg-gray-800 text-white text-lg px-8 py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
-                  Start Free Trial
-                  <ChevronRight className="ml-2 h-5 w-5" />
-                </Button>
+                <Link href={"/sign-up"}>
+                  <Button className="bg-black hover:bg-gray-800 text-white text-lg px-8 py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
+                    Start Free Trial
+                    <ChevronRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
                 <div className="absolute -top-2 -right-2 w-4 h-4 bg-orange-600 rounded-full animate-pulse"></div>
               </div>
             </div>
