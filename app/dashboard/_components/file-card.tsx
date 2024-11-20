@@ -21,7 +21,7 @@ export default function FileCard(file: {
   createdBy: string;
 }) {
   return (
-    <Card>
+    <Card className="flex flex-col justify-between">
       <CardHeader>
         <CardTitle>
           <Image src={"/pdf.png"} width={50} height={50} alt="" />

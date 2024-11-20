@@ -16,7 +16,7 @@ export default function DashaboardPage() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="font-bold text-2xl mb-6">Workspace</h1>
+        <h1 className="font-bold text-2xl mb-6">Dashboard</h1>
         <div className="">
           <UploadButton
             nbrOfFiles={files?.length || 0}

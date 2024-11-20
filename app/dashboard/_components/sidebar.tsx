@@ -1,10 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { useUserInfo } from "@/context/userInfoContext";
+import { cn } from "@/lib/utils";
 import { Layout, Loader2, Shield } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import UploadButton from "./upload-button";
-import { useUserInfo } from "@/context/userInfoContext";
+import Link from "next/link";
 
 const sidebarLinks = [
   {
@@ -15,12 +18,13 @@ const sidebarLinks = [
   {
     icon: Shield,
     label: "Subscriptions",
-    href: "/subscriptions",
+    href: "/dashboard/subscriptions",
   },
 ];
 
 export default function Sidebar() {
   const { userInfo, files } = useUserInfo();
+  const pathname = usePathname();
   return (
     <div className="md:w-64 shadow h-screen relative">
       <div className="flex justify-center mb-12 p-3">
@@ -31,12 +35,23 @@ export default function Sidebar() {
           nbrOfFiles={files?.length || 0}
           userCredits={userInfo?.credits || 0}
         />
-        {sidebarLinks.map((link, i) => (
-          <Button key={i} variant={"ghost"} className="w-full justify-center">
-            <link.icon className="w-4 h-4" />
-            {link.label}
-          </Button>
-        ))}
+        {sidebarLinks.map((link, i) => {
+          return (
+            <Link href={link.href} key={i}>
+              <Button
+                key={i}
+                variant={"ghost"}
+                className={cn(
+                  "w-full justify-center",
+                  pathname === link.href && "bg-muted"
+                )}
+              >
+                <link.icon className="w-4 h-4" />
+                {link.label}
+              </Button>
+            </Link>
+          );
+        })}
       </div>
       <div className="absolute bottom-20 w-full flex gap-1 flex-col items-center">
         <Progress
