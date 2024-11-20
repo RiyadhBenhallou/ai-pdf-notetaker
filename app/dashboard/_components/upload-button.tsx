@@ -15,7 +15,7 @@ export default function UploadButton({
         className="justify-center w-full"
         disabled={nbrOfFiles >= userCredits}
       >
-        {nbrOfFiles && userCredits ? (
+        {nbrOfFiles >= 0 && userCredits ? (
           <Plus className="w-4 h-4" />
         ) : (
           <Loader2 className="w-4 h-4 animate-spin" />
