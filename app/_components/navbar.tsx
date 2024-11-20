@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { FileText, Menu, X } from "lucide-react";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,12 +22,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
-            <Link href="/" className="flex-shrink-0 flex items-center">
-              <FileText className="h-8 w-8 text-black" />
-              <span className="ml-2 text-xl font-bold text-black">
-                AI PDF Reader
-              </span>
-            </Link>
+            <Image src={"/logo.svg"} alt="logo" width={38} height={38} />
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
             {navItems.map((item) => (

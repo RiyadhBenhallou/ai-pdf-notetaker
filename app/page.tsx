@@ -24,7 +24,7 @@ export default function LandingPage() {
             <div className="text-center">
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">
                 Unlock the Power of Your{" "}
-                <span className="text-yellow-500">PDFs</span> with AI
+                <span className="text-orange-600">PDFs</span> with AI
               </h1>
               <p className="mt-6 text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto">
                 Upload, analyze, and get answers from your PDF documents using
@@ -35,7 +35,7 @@ export default function LandingPage() {
                   Start Free Trial
                   <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
-                <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full animate-pulse"></div>
+                <div className="absolute -top-2 -right-2 w-4 h-4 bg-orange-600 rounded-full animate-pulse"></div>
               </div>
             </div>
           </div>
