@@ -26,9 +26,11 @@ export const userInfoContext = createContext<{
         createdBy: string;
       }[]
     | undefined;
+  user: any;
 }>({
   userInfo: undefined,
   files: undefined,
+  user: undefined,
 });
 
 export const useUserInfo = () => {
@@ -48,7 +50,7 @@ export default function UserInfoProvider({
     createdBy: user?.primaryEmailAddress?.emailAddress as string,
   });
   return (
-    <userInfoContext.Provider value={{ userInfo, files }}>
+    <userInfoContext.Provider value={{ userInfo, user, files }}>
       {children}
     </userInfoContext.Provider>
   );

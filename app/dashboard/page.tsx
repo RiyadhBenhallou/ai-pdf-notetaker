@@ -1,17 +1,30 @@
 "use client";
 import { useUserInfo } from "@/context/userInfoContext";
+import { api } from "@/convex/_generated/api";
+import { useMutation } from "convex/react";
+import { useEffect } from "react";
 import EmptyState from "./_components/empty-state";
 import FileCard from "./_components/file-card";
 import UploadButton from "./_components/upload-button";
 
 export default function DashaboardPage() {
-  // const [isPending, startTransition] = useTransition()
   // const { user } = useUser();
-  // // if (!user) return;
-  // const userFiles = useQuery(api.fileStorage.getUserFiles, {
-  //   createdBy: user?.primaryEmailAddress?.emailAddress as string,
-  // });
-  const { files, userInfo } = useUserInfo();
+  const { files, user, userInfo } = useUserInfo();
+  const createUser = useMutation(api.user.createUser);
+
+  useEffect(() => {
+    async function checkUser() {
+      const result = await createUser({
+        email: user?.primaryEmailAddress?.emailAddress as string,
+        userName: user?.fullName as string,
+        imageUrl: user?.imageUrl as string,
+      });
+      console.log(result);
+    }
+    if (user) {
+      checkUser();
+    }
+  }, [user, createUser]);
 
   return (
     <div>

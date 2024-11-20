@@ -3,11 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useUserInfo } from "@/context/userInfoContext";
 import { cn } from "@/lib/utils";
-import { Layout, Loader2, Shield } from "lucide-react";
-import Image from "next/image";
+import { FileText, Layout, Loader2, Shield } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import UploadButton from "./upload-button";
-import Link from "next/link";
 
 const sidebarLinks = [
   {
@@ -28,7 +27,8 @@ export default function Sidebar() {
   return (
     <div className="md:w-64 shadow h-screen relative">
       <div className="flex justify-center mb-12 p-3">
-        <Image src={"/logo.svg"} alt="logo" width={38} height={38} />
+        {/* <Image src={"/logo.svg"} alt="logo" width={38} height={38} /> */}
+        <FileText className="h-8 w-8" />
       </div>
       <div className="flex flex-col w-full gap-2 p-3">
         <UploadButton

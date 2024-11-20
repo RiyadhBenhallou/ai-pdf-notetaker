@@ -27,7 +27,7 @@ export const createUser = mutation({
 
 export const getUser = query({
   args: {
-    userEmail: v.string(),
+    userEmail: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     return await ctx.db
@@ -39,7 +39,7 @@ export const getUser = query({
 
 export const getUserByEmail = query({
   args: {
-    email: v.string(),
+    email: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await ctx.db

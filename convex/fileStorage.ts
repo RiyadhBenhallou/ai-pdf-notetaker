@@ -9,18 +9,19 @@ export const saveFile = mutation({
   args: {
     storageId: v.string(),
     fileName: v.string(),
-    createdBy: v.string(),
+    createdBy: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const url = await ctx.storage.getUrl(args.storageId);
-    const fileId = await ctx.db.insert("pdfFiles", {
-      fileUrl: url as string,
-      storageId: args.storageId,
-      fileName: args.fileName,
-      createdBy: args.createdBy,
-    });
-
-    return { fileId, url };
+    if (args.createdBy) {
+      const fileId = await ctx.db.insert("pdfFiles", {
+        fileUrl: url as string,
+        storageId: args.storageId,
+        fileName: args.fileName,
+        createdBy: args.createdBy,
+      });
+      return { fileId, url };
+    }
   },
 });
 
@@ -48,7 +49,7 @@ export const getFileById = query({
 
 export const getUserFiles = query({
   args: {
-    createdBy: v.string(),
+    createdBy: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const files = await ctx.db
@@ -95,7 +96,7 @@ export const saveNote = mutation({
   args: {
     fileId: v.string(),
     note: v.string(),
-    createdBy: v.string(),
+    createdBy: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const note = await ctx.db
@@ -107,11 +108,13 @@ export const saveNote = mutation({
         note: args.note,
       });
     } else {
-      await ctx.db.insert("notes", {
-        fileId: args.fileId,
-        note: args.note,
-        createdBy: args.createdBy,
-      });
+      if (args.createdBy) {
+        await ctx.db.insert("notes", {
+          fileId: args.fileId,
+          note: args.note,
+          createdBy: args.createdBy,
+        });
+      }
     }
   },
 });
