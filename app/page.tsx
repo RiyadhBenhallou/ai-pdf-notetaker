@@ -5,8 +5,10 @@ import { Input } from "@/components/ui/input";
 import { ChevronRight, FileText, Brain, Zap, Check } from "lucide-react";
 import Navbar from "./_components/navbar";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 
 export default function LandingPage() {
+  const { user } = useUser();
   const [email, setEmail] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -32,9 +34,9 @@ export default function LandingPage() {
                 cutting-edge AI technology.
               </p>
               <div className="mt-10 relative inline-block">
-                <Link href={"/sign-up"}>
+                <Link href={user ? "/dashboard" : "/sign-up"}>
                   <Button className="bg-black hover:bg-gray-800 text-white text-lg px-8 py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
-                    Start Free Trial
+                    {(user && "Dashboard") || "Get Started"}
                     <ChevronRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
