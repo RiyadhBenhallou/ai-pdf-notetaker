@@ -36,7 +36,7 @@ export default function WorkspacePage() {
   // Set initial page number only once when savedPageNumber is loaded
   useEffect(() => {
     if (savedPageNumber !== undefined && !hasInitialized) {
-      setPageNumber(savedPageNumber);
+      setPageNumber(savedPageNumber as number);
       setHasInitialized(true);
     }
   }, [savedPageNumber, hasInitialized]);

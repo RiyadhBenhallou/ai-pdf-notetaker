@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,24 +19,24 @@ export default function LandingPage() {
   };
 
   return (
-    <div>
+    <div className="bg-white text-black">
       <Navbar />
-      <div className="min-h-screen bg-gray-50 text-black">
+      <div className="min-h-screen">
         {/* Hero Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-100">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
           <div className="max-w-7xl mx-auto">
             <div className="text-center">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight">
                 Unlock the Power of Your{" "}
                 <span className="text-orange-600">PDFs</span> with AI
               </h1>
-              <p className="mt-6 text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto">
+              <p className="mt-6 text-xl sm:text-2xl text-gray-300 max-w-3xl mx-auto">
                 Upload, analyze, and get answers from your PDF documents using
                 cutting-edge AI technology.
               </p>
               <div className="mt-10 relative inline-block">
                 <Link href={user ? "/dashboard" : "/sign-up"}>
-                  <Button className="bg-black hover:bg-gray-800 text-white text-lg px-8 py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
+                  <Button className="bg-white hover:bg-gray-200 text-black text-lg px-8 py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
                     {(user && "Dashboard") || "Get Started"}
                     <ChevronRight className="ml-2 h-5 w-5" />
                   </Button>
@@ -49,7 +50,7 @@ export default function LandingPage() {
         {/* Features Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12">
+            <h2 className="text-4xl font-bold text-center mb-12">
               Key Features
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -75,9 +76,9 @@ export default function LandingPage() {
               ].map((feature, index) => (
                 <div
                   key={index}
-                  className="bg-gray-100 p-6 rounded-lg text-center"
+                  className="bg-white p-6 rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-300"
                 >
-                  <feature.icon className="h-12 w-12 mx-auto text-black mb-4" />
+                  <feature.icon className="h-12 w-12 mx-auto text-orange-600 mb-4" />
                   <h3 className="text-xl font-semibold mb-2">
                     {feature.title}
                   </h3>
@@ -91,7 +92,7 @@ export default function LandingPage() {
         {/* How It Works Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-black text-white">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12">
+            <h2 className="text-4xl font-bold text-center mb-12">
               How It Works
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -101,7 +102,7 @@ export default function LandingPage() {
                 "Ask questions and get accurate answers instantly",
               ].map((step, index) => (
                 <div key={index} className="flex items-start">
-                  <div className="flex-shrink-0 bg-white rounded-full p-3 text-black font-bold mr-4">
+                  <div className="flex-shrink-0 bg-orange-600 rounded-full p-3 text-white font-bold mr-4">
                     {index + 1}
                   </div>
                   <p className="text-lg">{step}</p>
@@ -112,9 +113,9 @@ export default function LandingPage() {
         </section>
 
         {/* Pricing Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12">
+            <h2 className="text-4xl font-bold text-center mb-12">
               Simple, Transparent Pricing
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -151,7 +152,7 @@ export default function LandingPage() {
               ].map((plan, index) => (
                 <div
                   key={index}
-                  className="border border-gray-200 rounded-lg p-6 text-center"
+                  className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-md hover:shadow-lg transition-shadow duration-300"
                 >
                   <h3 className="text-2xl font-bold mb-4">{plan.name}</h3>
                   <p className="text-3xl font-extrabold mb-6">{plan.price}</p>
@@ -161,7 +162,7 @@ export default function LandingPage() {
                         key={featureIndex}
                         className="flex items-center justify-center"
                       >
-                        <Check className="h-5 w-5 text-black mr-2" />
+                        <Check className="h-5 w-5 text-orange-600 mr-2" />
                         {feature}
                       </li>
                     ))}
@@ -185,12 +186,12 @@ export default function LandingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-100">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold text-black mb-6">
+            <h2 className="text-4xl font-bold text-black mb-6">
               Ready to revolutionize your PDF workflow?
             </h2>
-            <p className="text-xl text-gray-800 mb-8">
+            <p className="text-xl text-gray-600 mb-8">
               Join thousands of satisfied users and start getting answers from
               your PDFs today.
             </p>
@@ -208,7 +209,7 @@ export default function LandingPage() {
               />
               <Button
                 type="submit"
-                className="bg-black text-white hover:bg-gray-800"
+                className="bg-black text-white hover:bg-gray-800 transition duration-300"
               >
                 Start Free Trial
               </Button>
