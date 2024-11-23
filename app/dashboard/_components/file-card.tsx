@@ -40,7 +40,7 @@ export default function FileCard(file: {
       <CardContent>
         <h1>{file.fileName}</h1>
       </CardContent>
-      <CardFooter className="flex items-center justify-between">
+      <CardFooter className="flex items-center justify-between text-wrap">
         <div className="flex items-center gap-1">
           <EditDialog file={file}>
             <Button variant={"ghost"} size={"icon"}>
@@ -53,13 +53,13 @@ export default function FileCard(file: {
             </Button>
           </DeletionDialog>
         </div>
-        <Button asChild size={"sm"}>
+        <Button asChild size={"icon"}>
           <Link
             href={`/workspace/${file._id}`}
             target={"_blank"}
             className="text-sm"
           >
-            View Details
+            <ArrowUpRightFromSquare className="w-4 h-4" />
           </Link>
         </Button>
       </CardFooter>

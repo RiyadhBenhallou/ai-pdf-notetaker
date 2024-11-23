@@ -7,7 +7,9 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <UserInfoProvider>
       <div className="flex bg-gray-50">
-        <Sidebar />
+        <div className="hidden md:block">
+          <Sidebar />
+        </div>
         <div className="w-full">
           <div className="shadow">
             <Navbar />

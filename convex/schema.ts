@@ -25,7 +25,8 @@ export default defineSchema({
   }),
   notes: defineTable({
     fileId: v.string(),
-    createdBy: v.string(),
+    createdBy: v.optional(v.string()),
     note: v.string(),
+    pageNumber: v.optional(v.number()),
   }),
 });
