@@ -5,7 +5,7 @@ export const saveNote = mutation({
   args: {
     fileId: v.string(),
     note: v.string(),
-    createdBy: v.string(),
+    createdBy: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const record = await ctx.db
