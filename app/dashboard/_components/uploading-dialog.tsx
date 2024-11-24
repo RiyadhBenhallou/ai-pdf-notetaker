@@ -51,12 +51,12 @@ export default function UploadingDialog({ children }: { children: ReactNode }) {
         fileName: fileName,
         createdBy: user?.primaryEmailAddress?.emailAddress as string,
       });
-      const response = await fetch(`/api/pdf-loader?pdfUrl=${savedFile.url}`);
+      const response = await fetch(`/api/pdf-loader?pdfUrl=${savedFile?.url}`);
       const data = await response.json();
       console.log(data.result);
       await embedDoc({
         splitText: data.result,
-        fileId: savedFile.fileId,
+        fileId: savedFile?.fileId as string,
       });
       setIsOpen(false);
       setFileName("");
