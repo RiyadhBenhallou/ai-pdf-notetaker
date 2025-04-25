@@ -54,7 +54,7 @@ export default function TextEditor() {
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl focus:outline-none min-h-[200px] max-w-none",
+          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl focus:outline-hidden min-h-[200px] max-w-none",
       },
     },
     autofocus: true,
@@ -151,7 +151,7 @@ export default function TextEditor() {
   }
 
   return (
-    <div className="border rounded-lg shadow-sm bg-card text-card-foreground">
+    <div className="border rounded-lg shadow-xs bg-card text-card-foreground">
       <div className="flex flex-wrap items-center gap-1 p-2 border-b bg-muted/50">
         <ToolbarToggle
           isActive={editor.isActive("bold")}
@@ -278,7 +278,7 @@ export default function TextEditor() {
       <EditorContent
         editor={editor}
         className={cn(
-          "p-4 overflow-y-auto max-h-[600px] focus:outline-none min-h-screen",
+          "p-4 overflow-y-auto max-h-[600px] focus:outline-hidden min-h-screen",
           "transition-shadow duration-200 ease-in-out"
         )}
       />

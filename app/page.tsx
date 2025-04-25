@@ -23,7 +23,7 @@ export default function LandingPage() {
       <Navbar />
       <div className="min-h-screen">
         {/* Hero Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-gray-900 via-gray-800 to-black text-white">
           <div className="max-w-7xl mx-auto">
             <div className="text-center">
               <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight">
@@ -102,7 +102,7 @@ export default function LandingPage() {
                 "Ask questions and get accurate answers instantly",
               ].map((step, index) => (
                 <div key={index} className="flex items-start">
-                  <div className="flex-shrink-0 bg-orange-600 rounded-full p-3 text-white font-bold mr-4">
+                  <div className="shrink-0 bg-orange-600 rounded-full p-3 text-white font-bold mr-4">
                     {index + 1}
                   </div>
                   <p className="text-lg">{step}</p>
@@ -204,7 +204,7 @@ export default function LandingPage() {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-grow max-w-md"
+                className="grow max-w-md"
                 required
               />
               <Button

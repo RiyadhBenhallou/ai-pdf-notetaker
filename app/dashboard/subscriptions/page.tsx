@@ -83,7 +83,7 @@ export default function PricingGrid() {
                 <ul className="mt-8 space-y-4">
                   {tier.features.map((feature) => (
                     <li key={feature} className="flex items-start">
-                      <div className="flex-shrink-0">
+                      <div className="shrink-0">
                         <Check className="h-6 w-6 text-green-500" />
                       </div>
                       <p className="ml-3 text-base text-gray-700">{feature}</p>

@@ -66,7 +66,7 @@ export default function ModernNavbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="flex-shrink-0 flex items-center">
+            <Link href="/" className="shrink-0 flex items-center">
               <Image src={"/logo.svg"} alt="" height={38} width={38} />
             </Link>
           </div>
@@ -84,7 +84,7 @@ export default function ModernNavbar() {
                         <li className="row-span-3">
                           <NavigationMenuLink asChild>
                             <a
-                              className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-orange-500 to-orange-600 p-6 no-underline outline-none focus:shadow-md"
+                              className="flex h-full w-full select-none flex-col justify-end rounded-md bg-linear-to-b from-orange-500 to-orange-600 p-6 no-underline outline-hidden focus:shadow-md"
                               href={item.href}
                             >
                               <div className="mt-4 text-lg font-medium text-white">
@@ -136,7 +136,7 @@ export default function ModernNavbar() {
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                  className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                 >
                   <span className="sr-only">Open main menu</span>
                   <Menu className="h-6 w-6" aria-hidden="true" />

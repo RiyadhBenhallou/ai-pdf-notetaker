@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           <Sidebar />
         </div>
         <div className="w-full">
-          <div className="shadow">
+          <div className="shadow-sm">
             <Navbar />
           </div>
           <div className="p-8">{children}</div>

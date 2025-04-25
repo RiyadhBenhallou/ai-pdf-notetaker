@@ -16,7 +16,7 @@ export default function WorkspacePage() {
 
   return (
     <div>
-      <div className="p-3 shadow">
+      <div className="p-3 shadow-sm">
         <Navbar fileName={file?.fileName} />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2">
