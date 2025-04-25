@@ -1,8 +1,15 @@
 "use client";
 
+import AISelectionTooltip from "@/components/ai-selection-tooltip";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { api } from "@/convex/_generated/api";
 import { chatSession } from "@/lib/aiModel";
 import { cn, genPrompt } from "@/lib/utils";
@@ -33,18 +40,11 @@ import {
   UnderlineIcon,
 } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useCallback, useEffect, useState, useTransition } from "react";
-import AISelectionTooltip from "@/components/ai-selection-tooltip";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  TooltipProvider,
-} from "@/components/ui/tooltip";
+import { useCallback, useEffect, useTransition } from "react";
 
 export default function TextEditor() {
   const [isPending, startTransition] = useTransition();
-  const [showAITooltip, setShowAITooltip] = useState(false);
+  // const [showAITooltip, setShowAITooltip] = useState(false);
   const editor = useEditor({
     extensions: [
       StarterKit,

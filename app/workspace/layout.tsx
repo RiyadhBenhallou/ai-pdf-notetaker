@@ -1,12 +1,9 @@
 import type React from "react";
 // import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 // import { ThemeProvider } from "@/components/theme-provider"
-import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "@/components/ui/tooltip";
-
-const inter = Inter({ subsets: ["latin"] });
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
   title: "Document Workspace",
@@ -20,19 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div suppressHydrationWarning>
-      {/* <html lang="en" suppressHydrationWarning> */}
-      {/* <body className={inter.className}> */}
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <TooltipProvider>{children}</TooltipProvider>
-      </ThemeProvider>
-      {/* </body> */}
-      {/* </html> */}
-    </div>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <TooltipProvider>{children}</TooltipProvider>
+    </ThemeProvider>
   );
 }

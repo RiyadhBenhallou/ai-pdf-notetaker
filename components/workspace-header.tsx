@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Save, FileText, HelpCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/contexts/toast-context";
-import Link from "next/link";
+import { HelpCircle, Save } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface WorkspaceHeaderProps {
   fileName?: string;
@@ -60,14 +60,14 @@ export default function WorkspaceHeader({
           )}
         </Button>
 
-        {/* <Button
+        <Button
           variant="ghost"
           size="icon"
           onClick={handleHelpClick}
           aria-label="Help"
         >
           <HelpCircle className="h-5 w-5" />
-        </Button> */}
+        </Button>
 
         <ThemeToggle />
       </div>

@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useUserInfo } from "@/context/userInfoContext";
+import { useUserInfo } from "@/contexts/userInfoContext";
 import { cn } from "@/lib/utils";
 import { Layout, Loader2, Shield } from "lucide-react";
 import Image from "next/image";

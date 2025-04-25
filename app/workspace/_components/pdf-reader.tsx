@@ -1,17 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Button } from "@/components/ui/button";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ZoomIn,
-  ZoomOut,
-  RotateCw,
-} from "lucide-react";
+import { useMutation } from "convex/react";
+import { useEffect, useRef, useState } from "react";
 
 const PDFReader = ({
   fileId,
@@ -63,61 +55,61 @@ const PDFReader = ({
     return () => clearInterval(interval);
   }, [fileId, updateNotePage, currentPage, totalPages]);
 
-  const handlePreviousPage = () => {
-    try {
-      const viewer = (iframeRef.current as any).contentWindow;
-      if (viewer && viewer.PDFViewerApplication) {
-        viewer.PDFViewerApplication.page--;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handlePreviousPage = () => {
+  //   try {
+  //     const viewer = (iframeRef.current as any).contentWindow;
+  //     if (viewer && viewer.PDFViewerApplication) {
+  //       viewer.PDFViewerApplication.page--;
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const handleNextPage = () => {
-    try {
-      const viewer = (iframeRef.current as any).contentWindow;
-      if (viewer && viewer.PDFViewerApplication) {
-        viewer.PDFViewerApplication.page++;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleNextPage = () => {
+  //   try {
+  //     const viewer = (iframeRef.current as any).contentWindow;
+  //     if (viewer && viewer.PDFViewerApplication) {
+  //       viewer.PDFViewerApplication.page++;
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const handleZoomIn = () => {
-    try {
-      const viewer = (iframeRef.current as any).contentWindow;
-      if (viewer && viewer.PDFViewerApplication) {
-        viewer.PDFViewerApplication.zoomIn();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleZoomIn = () => {
+  //   try {
+  //     const viewer = (iframeRef.current as any).contentWindow;
+  //     if (viewer && viewer.PDFViewerApplication) {
+  //       viewer.PDFViewerApplication.zoomIn();
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const handleZoomOut = () => {
-    try {
-      const viewer = (iframeRef.current as any).contentWindow;
-      if (viewer && viewer.PDFViewerApplication) {
-        viewer.PDFViewerApplication.zoomOut();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleZoomOut = () => {
+  //   try {
+  //     const viewer = (iframeRef.current as any).contentWindow;
+  //     if (viewer && viewer.PDFViewerApplication) {
+  //       viewer.PDFViewerApplication.zoomOut();
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const handleRotate = () => {
-    try {
-      const viewer = (iframeRef.current as any).contentWindow;
-      if (viewer && viewer.PDFViewerApplication) {
-        const pdfViewer = viewer.PDFViewerApplication.pdfViewer;
-        pdfViewer.pagesRotation = (pdfViewer.pagesRotation + 90) % 360;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleRotate = () => {
+  //   try {
+  //     const viewer = (iframeRef.current as any).contentWindow;
+  //     if (viewer && viewer.PDFViewerApplication) {
+  //       const pdfViewer = viewer.PDFViewerApplication.pdfViewer;
+  //       pdfViewer.pagesRotation = (pdfViewer.pagesRotation + 90) % 360;
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div className="flex flex-col h-full">

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import Navbar from "./_components/navbar";
 import Sidebar from "./_components/sidebar";
-import UserInfoProvider from "@/context/userInfoContext";
+import UserInfoProvider from "@/contexts/userInfoContext";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (

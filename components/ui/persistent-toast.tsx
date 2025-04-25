@@ -40,6 +40,7 @@ export function PersistentToast({
             setIsVisible(false);
           }
         } catch (error) {
+          console.log(error);
           localStorage.setItem("dismissedToasts", JSON.stringify([]));
         }
       }
@@ -50,7 +51,7 @@ export function PersistentToast({
 
     // Cleanup function to prevent memory leaks
     return () => {};
-  }, []); // Empty dependency array ensures it only runs once
+  }, [id]); // Empty dependency array ensures it only runs once
 
   const handleDismiss = () => {
     setIsVisible(false);
