@@ -33,10 +33,18 @@ import {
   UnderlineIcon,
 } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useCallback, useEffect, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
+import AISelectionTooltip from "@/components/ai-selection-tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 
 export default function TextEditor() {
   const [isPending, startTransition] = useTransition();
+  const [showAITooltip, setShowAITooltip] = useState(false);
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -66,6 +74,7 @@ export default function TextEditor() {
   const savedNote = useQuery(api.notes.getNoteById, {
     fileId: fileId as string,
   });
+  const [savingNoteIsPending, startSavingNoteToDbTransition] = useTransition();
 
   useEffect(() => {
     editor
@@ -73,7 +82,6 @@ export default function TextEditor() {
       .focus()
       .setContent(savedNote as string)
       .run();
-    // editor?.commands.setContent(savedNote as string);
   }, [savedNote, editor]);
 
   const onAiSelection = () => {
@@ -116,8 +124,6 @@ export default function TextEditor() {
     });
   };
 
-  const [savingNoteIsPending, startSavingNoteToDbTransition] = useTransition();
-
   const saveNoteToDb = () => {
     startSavingNoteToDbTransition(async () => {
       const allText = editor?.getHTML();
@@ -132,15 +138,22 @@ export default function TextEditor() {
   const ToolbarToggle = useCallback(
     ({ isActive, onClick, icon: Icon, tooltip }: any) => {
       return (
-        <Toggle
-          size="sm"
-          pressed={isActive}
-          onPressedChange={onClick}
-          className="hover:bg-muted data-[state=on]:bg-muted"
-        >
-          <Icon className="h-4 w-4" />
-          <span className="sr-only">{tooltip}</span>
-        </Toggle>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                size="sm"
+                pressed={isActive}
+                onPressedChange={onClick}
+                className="hover:bg-muted data-[state=on]:bg-muted"
+              >
+                <Icon className="h-4 w-4" />
+                <span className="sr-only">{tooltip}</span>
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>{tooltip}</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       );
     },
     []
@@ -151,137 +164,148 @@ export default function TextEditor() {
   }
 
   return (
-    <div className="border rounded-lg shadow-xs bg-card text-card-foreground">
-      <div className="flex flex-wrap items-center gap-1 p-2 border-b bg-muted/50">
-        <ToolbarToggle
-          isActive={editor.isActive("bold")}
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          icon={Bold}
-          tooltip="Bold"
-        />
-        <ToolbarToggle
-          isActive={editor.isActive("italic")}
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          icon={Italic}
-          tooltip="Italic"
-        />
-        <ToolbarToggle
-          isActive={editor.isActive("underline")}
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          icon={UnderlineIcon}
-          tooltip="Underline"
-        />
-        <ToolbarToggle
-          isActive={editor.isActive("strike")}
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          icon={Strikethrough}
-          tooltip="Strikethrough"
-        />
-        <ToolbarToggle
-          isActive={editor.isActive("highlight")}
-          onClick={() => editor.chain().focus().toggleHighlight().run()}
-          icon={Highlighter}
-          tooltip="Highlight"
-        />
-        <Separator orientation="vertical" className="mx-1 h-6" />
-        <ToolbarToggle
-          isActive={editor.isActive("heading", { level: 1 })}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
-          icon={Heading1}
-          tooltip="Heading 1"
-        />
-        <ToolbarToggle
-          isActive={editor.isActive("heading", { level: 2 })}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          icon={Heading2}
-          tooltip="Heading 2"
-        />
-        <Separator orientation="vertical" className="mx-1 h-6" />
-        <ToolbarToggle
-          isActive={editor.isActive("bulletList")}
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          icon={List}
-          tooltip="Bullet List"
-        />
-        {/* <ToolbarToggle
-          isActive={editor.isActive("orderedList")}
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          icon={ListOrdered}
-          tooltip="Ordered List"
-        /> */}
-        <ToolbarToggle
-          isActive={editor.isActive("blockquote")}
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          icon={Quote}
-          tooltip="Blockquote"
-        />
-        <Separator orientation="vertical" className="mx-1 h-6" />
-        <ToolbarToggle
-          isActive={editor.isActive({ textAlign: "left" })}
-          onClick={() => editor.chain().focus().setTextAlign("left").run()}
-          icon={AlignLeft}
-          tooltip="Align Left"
-        />
-        <ToolbarToggle
-          isActive={editor.isActive({ textAlign: "center" })}
-          onClick={() => editor.chain().focus().setTextAlign("center").run()}
-          icon={AlignCenter}
-          tooltip="Align Center"
-        />
-        <ToolbarToggle
-          isActive={editor.isActive({ textAlign: "right" })}
-          onClick={() => editor.chain().focus().setTextAlign("right").run()}
-          icon={AlignRight}
-          tooltip="Align Right"
-        />
-        <ToolbarToggle
-          isActive={editor.isActive({ textAlign: "justify" })}
-          onClick={() => editor.chain().focus().setTextAlign("justify").run()}
-          icon={AlignJustify}
-          tooltip="Justify"
-        />
-        <Separator orientation="vertical" className="mx-1 h-6" />
+    <TooltipProvider>
+      <div className="border rounded-lg shadow-xs bg-card text-card-foreground h-full flex flex-col">
+        <div className="flex flex-wrap items-center gap-1 p-2 border-b bg-muted/50">
+          <ToolbarToggle
+            isActive={editor.isActive("bold")}
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            icon={Bold}
+            tooltip="Bold"
+          />
+          <ToolbarToggle
+            isActive={editor.isActive("italic")}
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            icon={Italic}
+            tooltip="Italic"
+          />
+          <ToolbarToggle
+            isActive={editor.isActive("underline")}
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            icon={UnderlineIcon}
+            tooltip="Underline"
+          />
+          <ToolbarToggle
+            isActive={editor.isActive("strike")}
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            icon={Strikethrough}
+            tooltip="Strikethrough"
+          />
+          <ToolbarToggle
+            isActive={editor.isActive("highlight")}
+            onClick={() => editor.chain().focus().toggleHighlight().run()}
+            icon={Highlighter}
+            tooltip="Highlight"
+          />
+          <Separator orientation="vertical" className="mx-1 h-6" />
+          <ToolbarToggle
+            isActive={editor.isActive("heading", { level: 1 })}
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 1 }).run()
+            }
+            icon={Heading1}
+            tooltip="Heading 1"
+          />
+          <ToolbarToggle
+            isActive={editor.isActive("heading", { level: 2 })}
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 2 }).run()
+            }
+            icon={Heading2}
+            tooltip="Heading 2"
+          />
+          <Separator orientation="vertical" className="mx-1 h-6" />
+          <ToolbarToggle
+            isActive={editor.isActive("bulletList")}
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            icon={List}
+            tooltip="Bullet List"
+          />
+          <ToolbarToggle
+            isActive={editor.isActive("blockquote")}
+            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            icon={Quote}
+            tooltip="Blockquote"
+          />
+          <Separator orientation="vertical" className="mx-1 h-6" />
+          <ToolbarToggle
+            isActive={editor.isActive({ textAlign: "left" })}
+            onClick={() => editor.chain().focus().setTextAlign("left").run()}
+            icon={AlignLeft}
+            tooltip="Align Left"
+          />
+          <ToolbarToggle
+            isActive={editor.isActive({ textAlign: "center" })}
+            onClick={() => editor.chain().focus().setTextAlign("center").run()}
+            icon={AlignCenter}
+            tooltip="Align Center"
+          />
+          <ToolbarToggle
+            isActive={editor.isActive({ textAlign: "right" })}
+            onClick={() => editor.chain().focus().setTextAlign("right").run()}
+            icon={AlignRight}
+            tooltip="Align Right"
+          />
+          <ToolbarToggle
+            isActive={editor.isActive({ textAlign: "justify" })}
+            onClick={() => editor.chain().focus().setTextAlign("justify").run()}
+            icon={AlignJustify}
+            tooltip="Align Justify"
+          />
+          <Separator orientation="vertical" className="mx-1 h-6" />
 
-        <Button
-          size="sm"
-          variant={"ghost"}
-          // pressed={isActive}
-          // onPressedChange={onClick}
-          onClick={onAiSelection}
-          className="hover:bg-muted data-[state=on]:bg-muted"
-        >
-          {isPending ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <Sparkles className="h-4 w-4 hover:bg-yellow-500" />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={onAiSelection}
+                className="hover:bg-muted data-[state=on]:bg-muted"
+                disabled={isPending}
+              >
+                {isPending ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Sparkles className="h-4 w-4 text-yellow-500" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Generate with AI</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={saveNoteToDb}
+                className="hover:bg-muted data-[state=on]:bg-muted"
+                disabled={savingNoteIsPending}
+              >
+                {savingNoteIsPending ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <SaveIcon className="w-4 h-4" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Save Note</TooltipContent>
+          </Tooltip>
+        </div>
+
+        <EditorContent
+          editor={editor}
+          className={cn(
+            "p-4 overflow-y-auto flex-1 focus:outline-hidden",
+            "transition-shadow duration-200 ease-in-out"
           )}
-        </Button>
-        <Button
-          size="sm"
-          variant={"ghost"}
-          // pressed={isActive}
-          // onPressedChange={onClick}
-          onClick={saveNoteToDb}
-          className="hover:bg-muted data-[state=on]:bg-muted"
-        >
-          {savingNoteIsPending ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <SaveIcon className="w-4 h-4" />
-          )}
-        </Button>
+        />
+
+        <AISelectionTooltip
+          onAISelect={onAiSelection}
+          isProcessing={isPending}
+        />
       </div>
-      <EditorContent
-        editor={editor}
-        className={cn(
-          "p-4 overflow-y-auto max-h-[600px] focus:outline-hidden min-h-screen",
-          "transition-shadow duration-200 ease-in-out"
-        )}
-      />
-    </div>
+    </TooltipProvider>
   );
 }
