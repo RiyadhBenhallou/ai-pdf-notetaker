@@ -1,70 +1,46 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { PersistentToast } from "@/components/ui/persistent-toast";
-import { Sparkles, MousePointer, FileText } from "lucide-react";
+import { useEffect } from "react";
+import { useToast } from "@/contexts/toast-context";
 
 const guides = [
   {
     id: "select-text-guide",
-    title: "Select Text for AI Analysis",
+    title: "How to Use AI in Your Workspace",
     description:
-      "Select any text in the editor, then click the sparkle icon to generate an AI response based on your selection.",
-    icon: Sparkles,
+      "Select any text in the editor, then click the sparkle icon to generate AI responses based on your PDF content.",
   },
   {
     id: "save-notes-guide",
     title: "Save Your Notes",
     description:
       "Your notes are automatically saved when you use AI, but you can also manually save by clicking the save icon.",
-    icon: FileText,
   },
   {
     id: "pdf-navigation-guide",
     title: "PDF Navigation",
     description:
       "The PDF viewer tracks your current page. Use the PDF controls to navigate through the document.",
-    icon: MousePointer,
   },
 ];
 
 export default function WorkspaceGuide() {
-  const [currentGuideIndex, setCurrentGuideIndex] = useState(0);
-  const [showGuide, setShowGuide] = useState(true);
-  const [hasInitialized, setHasInitialized] = useState(false);
+  const { showToast } = useToast();
 
-  // Check if user has seen the guide before, but only once during initial mount
+  // Show the first guide on mount
   useEffect(() => {
-    if (!hasInitialized) {
-      const hasSeenGuide = localStorage.getItem("hasSeenWorkspaceGuide");
-      if (hasSeenGuide === "true") {
-        setShowGuide(false);
-      }
-      setHasInitialized(true);
-    }
-  }, [hasInitialized]);
+    // Add a slight delay to ensure the component is fully mounted
+    const timer = setTimeout(() => {
+      showToast({
+        id: guides[0].id,
+        title: guides[0].title,
+        description: guides[0].description,
+        variant: "info",
+      });
+    }, 500);
 
-  const handleDismissAll = () => {
-    setShowGuide(false);
-    localStorage.setItem("hasSeenWorkspaceGuide", "true");
-  };
+    return () => clearTimeout(timer);
+  }, [showToast]);
 
-  const handleNext = () => {
-    setCurrentGuideIndex((prev) => (prev + 1) % guides.length);
-  };
-
-  if (!showGuide) return null;
-
-  const currentGuide = guides[currentGuideIndex];
-
-  return (
-    <PersistentToast
-      id={currentGuide.id}
-      title={currentGuide.title}
-      description={currentGuide.description}
-      variant="info"
-      position="bottom-right"
-      onDismiss={handleDismissAll}
-    />
-  );
+  return null;
 }

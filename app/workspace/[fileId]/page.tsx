@@ -61,6 +61,7 @@ export default function WorkspacePage() {
           </TabsContent>
         </Tabs>
 
+        {/* This component just triggers the toast to show */}
         <WorkspaceGuide />
       </div>
     );
@@ -91,6 +92,7 @@ export default function WorkspacePage() {
         </ResizablePanel>
       </ResizablePanelGroup>
 
+      {/* This component just triggers the toast to show */}
       <WorkspaceGuide />
     </div>
   );

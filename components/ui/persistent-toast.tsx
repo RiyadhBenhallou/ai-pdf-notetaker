@@ -31,21 +31,26 @@ export function PersistentToast({
 
   // Check if this toast has been dismissed before
   useEffect(() => {
-    // Only check localStorage once during component initialization
-    const dismissedToasts = localStorage.getItem("dismissedToasts");
-    if (dismissedToasts) {
-      try {
-        const parsedToasts = JSON.parse(dismissedToasts);
-        if (Array.isArray(parsedToasts) && parsedToasts.includes(id)) {
-          setIsVisible(false);
+    const checkDismissed = () => {
+      const dismissedToasts = localStorage.getItem("dismissedToasts");
+      if (dismissedToasts) {
+        try {
+          const parsedToasts = JSON.parse(dismissedToasts);
+          if (Array.isArray(parsedToasts) && parsedToasts.includes(id)) {
+            setIsVisible(false);
+          }
+        } catch (error) {
+          localStorage.setItem("dismissedToasts", JSON.stringify([]));
         }
-      } catch (error) {
-        // If there's an error parsing JSON, reset the storage
-        localStorage.setItem("dismissedToasts", JSON.stringify([]));
       }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run once on mount
+    };
+
+    // Only check once on mount
+    checkDismissed();
+
+    // Cleanup function to prevent memory leaks
+    return () => {};
+  }, []); // Empty dependency array ensures it only runs once
 
   const handleDismiss = () => {
     setIsVisible(false);
@@ -57,14 +62,6 @@ export function PersistentToast({
     localStorage.setItem("dismissedToasts", JSON.stringify(parsedToasts));
 
     if (onDismiss) onDismiss();
-  };
-
-  const positionClasses = {
-    "top-right": "top-4 right-4",
-    "top-left": "top-4 left-4",
-    "bottom-right": "bottom-4 right-4",
-    "bottom-left": "bottom-4 left-4",
-    center: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
   };
 
   const variantClasses = {
@@ -81,10 +78,25 @@ export function PersistentToast({
   return (
     <div
       className={cn(
-        "fixed z-50 w-96 max-w-[calc(100vw-2rem)] shadow-lg rounded-lg border p-4 transition-all duration-300",
-        positionClasses[position],
+        "fixed z-[100] w-96 max-w-[calc(100vw-2rem)] shadow-lg rounded-lg border p-4 transition-all duration-300",
         variantClasses[variant]
       )}
+      style={{
+        // Use inline styles for positioning to ensure they take precedence
+        top: position.includes("top")
+          ? "1rem"
+          : position === "center"
+          ? "50%"
+          : "auto",
+        bottom: position.includes("bottom") ? "1rem" : "auto",
+        left: position.includes("left")
+          ? "1rem"
+          : position === "center"
+          ? "50%"
+          : "auto",
+        right: position.includes("right") ? "1rem" : "auto",
+        transform: position === "center" ? "translate(-50%, -50%)" : "none",
+      }}
     >
       <div className="flex items-start gap-3">
         <div className="flex-shrink-0 mt-0.5">

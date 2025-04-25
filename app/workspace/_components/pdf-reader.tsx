@@ -121,7 +121,7 @@ const PDFReader = ({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between p-2 border-b bg-muted/30">
+      {/* <div className="flex items-center justify-between p-2 border-b bg-muted/30">
         <div className="flex items-center gap-1">
           <Button
             variant="outline"
@@ -179,7 +179,7 @@ const PDFReader = ({
             <span className="sr-only">Rotate</span>
           </Button>
         </div>
-      </div>
+      </div> */}
 
       <div className="flex-1 relative">
         {isLoading && (

@@ -3,35 +3,38 @@
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Save, FileText, HelpCircle } from "lucide-react";
-import { useState } from "react";
-import { PersistentToast } from "@/components/ui/persistent-toast";
+import { useToast } from "@/contexts/toast-context";
 import Link from "next/link";
+import Image from "next/image";
 
 interface WorkspaceHeaderProps {
   fileName?: string;
   onSave?: () => void;
   isSaving?: boolean;
-  onHelp?: () => void;
 }
 
 export default function WorkspaceHeader({
   fileName,
   onSave,
   isSaving = false,
-  onHelp,
 }: WorkspaceHeaderProps) {
-  const [showHelp, setShowHelp] = useState(false);
+  const { showToast } = useToast();
 
   const handleHelpClick = () => {
-    setShowHelp(!showHelp);
-    if (onHelp) onHelp();
+    showToast({
+      id: "help-toast",
+      title: "How to Use AI in Your Workspace",
+      description:
+        "Select text in the editor and click the sparkle icon to generate AI-powered responses based on your PDF content.",
+      variant: "info",
+    });
   };
 
   return (
     <div className="flex items-center justify-between w-full px-4 py-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center gap-2">
-        <Link href={"/dashboard"}>
-          <FileText className="h-5 w-5 text-primary" />
+        <Link href="/dashboard" className="shrink-0 flex items-center">
+          <Image src={"/logo.svg"} alt="" height={38} width={38} />
         </Link>
         <h1 className="text-lg font-medium truncate max-w-[200px] sm:max-w-md">
           {fileName || "Untitled Document"}
@@ -57,28 +60,17 @@ export default function WorkspaceHeader({
           )}
         </Button>
 
-        <Button
+        {/* <Button
           variant="ghost"
           size="icon"
           onClick={handleHelpClick}
           aria-label="Help"
         >
           <HelpCircle className="h-5 w-5" />
-        </Button>
+        </Button> */}
 
         <ThemeToggle />
       </div>
-
-      {showHelp && (
-        <PersistentToast
-          id="workspace-help"
-          title="How to use AI in your workspace"
-          description="Select text in the editor and click the sparkle icon to generate AI-powered responses based on your PDF content."
-          variant="info"
-          position="top-right"
-          onDismiss={() => setShowHelp(false)}
-        />
-      )}
     </div>
   );
 }
