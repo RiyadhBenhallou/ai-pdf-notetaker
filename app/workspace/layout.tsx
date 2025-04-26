@@ -3,7 +3,6 @@ import type React from "react";
 import type { Metadata } from "next";
 // import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
   title: "Document Workspace",
@@ -17,13 +16,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
-      <TooltipProvider>{children}</TooltipProvider>
-    </ThemeProvider>
+    // <ThemeProvider
+    //   attribute="class"
+    //   defaultTheme="system"
+    //   enableSystem
+    //   disableTransitionOnChange
+    // >
+    <TooltipProvider>{children}</TooltipProvider>
+    // </ThemeProvider>
   );
 }

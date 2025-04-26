@@ -1,6 +1,5 @@
 "use client";
 
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/contexts/toast-context";
 import { HelpCircle, Save } from "lucide-react";
@@ -69,7 +68,7 @@ export default function WorkspaceHeader({
           <HelpCircle className="h-5 w-5" />
         </Button>
 
-        <ThemeToggle />
+        {/* <ThemeToggle /> */}
       </div>
     </div>
   );
